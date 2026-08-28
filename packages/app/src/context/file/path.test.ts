@@ -55,6 +55,21 @@ describe("file path helpers", () => {
     expect(unquoteGitPath('"plain\\nname"')).toBe("plain\nname")
     expect(unquoteGitPath("a/b/c.ts")).toBe("a/b/c.ts")
   })
+
+  test("unquotes all named git escape sequences", () => {
+    expect(unquoteGitPath('"\\n"')).toBe("\n")
+    expect(unquoteGitPath('"\\r"')).toBe("\r")
+    expect(unquoteGitPath('"\\t"')).toBe("\t")
+    expect(unquoteGitPath('"\\b"')).toBe("\b")
+    expect(unquoteGitPath('"\\f"')).toBe("\f")
+    expect(unquoteGitPath('"\\v"')).toBe("\v")
+    expect(unquoteGitPath('"\\\\"')).toBe("\\")
+    expect(unquoteGitPath('"\\""')).toBe('"')
+  })
+
+  test("passes through an unrecognized escape sequence literally", () => {
+    expect(unquoteGitPath('"\\q"')).toBe("q")
+  })
 })
 
 describe("encodeFilePath", () => {
