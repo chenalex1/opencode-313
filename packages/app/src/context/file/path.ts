@@ -16,6 +16,17 @@ export function stripQueryAndHash(input: string) {
   return input
 }
 
+const GIT_ESCAPE_MAP: Record<string, string> = {
+  n: "\n",
+  r: "\r",
+  t: "\t",
+  b: "\b",
+  f: "\f",
+  v: "\v",
+  "\\": "\\",
+  '"': '"',
+}
+
 export function unquoteGitPath(input: string) {
   if (!input.startsWith('"')) return input
   if (!input.endsWith('"')) return input
@@ -48,23 +59,7 @@ export function unquoteGitPath(input: string) {
       continue
     }
 
-    const escaped =
-      next === "n"
-        ? "\n"
-        : next === "r"
-          ? "\r"
-          : next === "t"
-            ? "\t"
-            : next === "b"
-              ? "\b"
-              : next === "f"
-                ? "\f"
-                : next === "v"
-                  ? "\v"
-                  : next === "\\" || next === '"'
-                    ? next
-                    : undefined
-
+    const escaped = GIT_ESCAPE_MAP[next]
     bytes.push((escaped ?? next).charCodeAt(0))
     i++
   }
