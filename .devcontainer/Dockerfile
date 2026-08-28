@@ -10,5 +10,4 @@ RUN if [ "debian" == "alpine" ] ; then apk update ; else apt-get update ; fi
 # Install Git
 RUN if [ "debian" == "alpine" ] ; then apk add git ; else apt-get install -y git ; fi
 
-RUN curl https://qlty.sh | bash
-ENV PATH="/root/.qlty/bin:${PATH}"
+COPY --from=ghcr.io/qltysh/qlty:latest /usr/local/bin/qlty /usr/local/bin/qlty
