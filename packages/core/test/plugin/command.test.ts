@@ -44,4 +44,35 @@ describe("CommandPlugin.Plugin", () => {
       })
     }),
   )
+
+  it.effect("registers the built-in scotty command", () =>
+    Effect.gen(function* () {
+      const command = yield* CommandV2.Service
+      yield* CommandPlugin.Plugin.effect(
+        host({
+          command: { transform: command.transform, reload: command.reload },
+        }),
+      ).pipe(
+        Effect.provideService(
+          Location.Service,
+          Location.Service.of(location({ directory }, { projectDirectory: project })),
+        ),
+      )
+
+      expect(yield* command.get("scotty")).toMatchObject({
+        name: "scotty",
+        description: "print ASCII art of a cute Scottish terrier",
+      })
+
+      const template = (yield* command.get("scotty"))?.template ?? ""
+      expect(template).toContain("Scotty")
+      // The drawing ships with the command instead of being left to the model.
+      expect(template.split("\n").filter((line) => line.trim().length > 0).length).toBeGreaterThan(8)
+      // Templates go through `$N` and `` !`cmd` `` substitution before reaching the
+      // model; either one appearing in the art would mangle the drawing.
+      expect(template).not.toMatch(/\$(\d+)/)
+      expect(template).not.toMatch(/!`([^`]+)`/)
+      expect(template).not.toContain("$ARGUMENTS")
+    }),
+  )
 })
