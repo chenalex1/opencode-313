@@ -1,0 +1,14 @@
+Print the ASCII art of Scotty the Scottish Terrier below, reproduced exactly, character for character, inside a fenced code block. Preserve every space so the drawing stays aligned. Do not redraw it, restyle it, or replace it with your own art, and do not call any tools. A short one-line greeting before the drawing is welcome.
+
+```
+      /\   /\                    ___
+     /  \_/  \                  /   \
+     |  o o  |                 |     |
+     |   ~   |_________________|     |
+     |  \_/  |                       |
+      \_____/                        |
+     |                               |
+     |_______________________________|
+        | |   | |          | |   | |
+        |_|   |_|          |_|   |_|
+```
